@@ -169,6 +169,27 @@ transform:translate(-50%,-50%);
     animation: pulse 2s infinite;
 }
 
+#songTitle{
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+
+max-width:160px;
+
+animation:titleFade .4s ease;
+}
+
+@keyframes titleFade{
+from{
+opacity:0;
+transform:translateY(10px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
 @keyframes pulse{
     0%{opacity:.4}
     50%{opacity:1}
@@ -353,20 +374,32 @@ z-index:1000;
     height: 100%;
 }
 .vinyl-player{
-    position:fixed;
-    top:25px;
-    right:25px;
 
-    display:flex;
-    align-items:center;
-    gap:18px;
+position:fixed;
 
-    z-index:1000;
+top:30px;
+right:30px;
 
-    transform:translateX(120px) translateY(-40px);
-    opacity:0;
+display:flex;
+align-items:center;
 
-    transition:.6s ease;
+gap:18px;
+
+z-index:1000;
+
+transform:translateY(-40px) scale(.9);
+opacity:0;
+
+transition:.6s cubic-bezier(.2,.8,.2,1);
+}
+
+.vinyl-player.collapsed .player-panel{
+transform:scaleX(0);
+opacity:0;
+}
+
+.vinyl-player.collapsed{
+gap:0;
 }
 
 .vinyl-player.show{
@@ -423,36 +456,80 @@ margin-top:8px;
 }
 
 .gift-box{
-width:120px;
-height:120px;
+width:140px;
+height:140px;
 position:relative;
 cursor:pointer;
-animation:floatGift 2s ease-in-out infinite;
+
+animation:floatGift 3s ease-in-out infinite;
 }
 
 .box{
-width:120px;
-height:80px;
-background:#d4af37;
-border-radius:8px;
+width:140px;
+height:90px;
+
+background:
+linear-gradient(145deg,#d4af37,#a88421);
+
+border-radius:12px;
+
+box-shadow:
+0 15px 30px rgba(0,0,0,.4),
+inset 0 3px 6px rgba(255,255,255,.4);
+
 position:absolute;
 bottom:0;
 }
 
+.box::before{
+content:"";
+position:absolute;
+width:16px;
+height:100%;
+left:50%;
+transform:translateX(-50%);
+background:#8b1e3f;
+}
+
 .lid{
-width:120px;
-height:40px;
-background:#c89b2c;
+width:140px;
+height:50px;
+
+background:
+linear-gradient(145deg,#e0bc45,#b38d2c);
+
+border-radius:12px;
+
 position:absolute;
 top:0;
-border-radius:8px;
-transition:.5s;
+
+box-shadow:
+0 8px 15px rgba(0,0,0,.4),
+inset 0 3px 5px rgba(255,255,255,.3);
+
+transition:.6s ease;
+}
+
+.lid::before{
+content:"";
+position:absolute;
+width:16px;
+height:100%;
+left:50%;
+transform:translateX(-50%);
+background:#8b1e3f;
 }
 
 .gift-box.open .lid{
-transform:translateY(-80px) rotate(-20deg);
+transform:
+translateY(-110px)
+rotate(-20deg);
 }
 
+@keyframes floatGift{
+0%,100%{transform:translateY(0)}
+50%{transform:translateY(-15px)}
+}
 @keyframes floatGift{
 0%,100%{transform:translateY(0)}
 50%{transform:translateY(-10px)}

@@ -119,33 +119,6 @@ skipMic.onclick = () => {
 
 };
 
-cake.addEventListener("click", async () => {
-    if (!micAllowed && micGate.style.display !== "none") return;
-
-    blowCandle();
-
-    loader.style.opacity = "0";
-    setTimeout(() => {
-        loader.style.display = "none";
-        main.style.display = "block";
-        message.style.opacity = "1";
-    }, 500); // give smooth fade
-
-    shufflePlaylist();
-    loadTrack(currentTrack);
-
-    try {
-        await music.play();
-        record.style.animationPlayState = "running";
-        playPauseBtn.textContent = "⏸";
-        player.classList.add("show"); // use the player const
-    } catch (err) {
-        console.log("Autoplay blocked", err);
-    }
-
-    startConfetti();
-    startMicBlowDetection();
-});
 
 window.addEventListener("resize", ()=>{
 canvas.width = window.innerWidth;
@@ -306,9 +279,9 @@ let volume = Math.sqrt(sum/dataArray.length);
 
     document.getElementById("blowMeter").style.width = percent + "%";
 
-    flame.style.transform = "scale(" + (1 - volume/200) + ")";
-
-    if(volume > 100 && !candleBlown){
+let bend = Math.min(volume/10,20);
+flame.style.transform = "scale("+(1-volume/250)+") rotateX("+bend+"deg)";
+    if(volume > 140 && !candleBlown){
 
         candleBlown = true;
 
@@ -328,7 +301,20 @@ let volume = Math.sqrt(sum/dataArray.length);
 const gift = document.getElementById("giftBox");
 const cakeArea = document.getElementById("cakeArea");
 
-gift.addEventListener("click", async ()=>{
+let tapsRequired = Math.floor(Math.random()*5)+3; // 3-7 taps
+let tapCount = 0;
+
+gift.addEventListener("click", () => {
+
+tapCount++;
+
+gift.style.transform = "scale(0.95) rotate("+(Math.random()*6-3)+"deg)";
+
+setTimeout(()=>{
+gift.style.transform="";
+},120);
+
+if(tapCount >= tapsRequired){
 
 gift.classList.add("open");
 
@@ -340,6 +326,8 @@ cakeArea.style.display="block";
 startMicBlowDetection();
 
 },700);
+
+}
 
 });
 
@@ -403,13 +391,12 @@ function animateConfetti(){
 }
 function showPlayer(){
 
-    player.style.display="flex";
-
+   player.classList.add("show");
     player.classList.remove("collapsed");
 
     setTimeout(()=>{
         player.classList.add("collapsed");
-    },3000);
+    },5000);
 
 }
 
