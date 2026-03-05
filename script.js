@@ -43,26 +43,34 @@ const record = document.querySelector(".record");
 
 function loadTrack(index) {
     music.src = playlist[index].file;
+songTitle.style.opacity= 0;
 
+setTimeout(()=>{
     songTitle.textContent = playlist[index].name;
-    showPlayer();
+    songTitle.style.opacity= 1;
+},200);
 }
 
 function playMusic() {
 
-    music.currentTime = music.currentTime;
+    music.play().then(() => {
 
-    music.play().catch(()=>{});
+        record.style.animationPlayState = "running";
+        player.classList.add("playing");
+        playPauseBtn.textContent = "⏸";
 
-    record.style.animationPlayState = "running";
+    }).catch((err) => {
+        console.log("Play blocked:", err);
+        playPauseBtn.textContent = "▶";
+    });
 
-    playPauseBtn.textContent = "⏸";
 }
 
 function pauseMusic() {
     music.pause();
     record.style.animationPlayState="paused";
     playPauseBtn.textContent = "▶";
+    player.classList.remove("playing");
 }
 
 playPauseBtn.addEventListener("click", () => {
@@ -77,6 +85,7 @@ nextBtn.addEventListener("click", () => {
     currentTrack = (currentTrack + 1) % playlist.length;
     loadTrack(currentTrack);
     playMusic();
+    showNowPlaying();
     startMicBlowDetection();
 });
 
@@ -84,14 +93,23 @@ prevBtn.addEventListener("click", () => {
     currentTrack = (currentTrack - 1 + playlist.length) % playlist.length;
     loadTrack(currentTrack);
     playMusic();
+    showNowPlaying();
 });
 
 music.addEventListener("ended", () => {
     currentTrack = (currentTrack + 1) % playlist.length;
     loadTrack(currentTrack);
     playMusic();
+    showNowPlaying();
 });
 
+function showNowPlaying(){
+    songTitle.style.opacity = 0;
+    setTimeout(()=>{
+        songTitle.textContent = playlist[currentTrack].name;
+        songTitle.style.opacity = 1;
+    },100);
+}
 
 const micGate = document.getElementById("micGate");
 const allowMic = document.getElementById("allowMic");
@@ -128,22 +146,24 @@ canvas.height = window.innerHeight;
 function startSite(){
 
     blowCandle();
-
+    loader.style.transition="opacity 1s ease";
     loader.style.opacity="0";
 
     setTimeout(()=>{
-        loader.remove();
         main.style.display="block";
+        loader.style.display="none";
+
+        setTimeout(()=>{
         message.style.opacity="1";
-    },900);
+    },200);
+
+},1000);
 
     shufflePlaylist();
     loadTrack(currentTrack);
-
-    music.play().catch(()=>{});
-
+    playMusic();
     startConfetti();
-
+player.classList.add("show");
 }
 
 function startMusic(){
@@ -174,27 +194,6 @@ typeMessage(
 message
 );
 
-function createHeart(){
-
-const heart=document.createElement("div");
-
-heart.innerHTML="❤️";
-
-heart.style.position="fixed";
-heart.style.left=Math.random()*100+"vw";
-heart.style.bottom="-20px";
-heart.style.fontSize=Math.random()*20+10+"px";
-
-heart.style.animation="float 6s linear";
-
-document.body.appendChild(heart);
-
-setTimeout(()=>heart.remove(),6000);
-
-}
-
-setInterval(createHeart,800);
-
 function shufflePlaylist(){
 
     for(let i = playlist.length -1; i>0; i--){
@@ -204,7 +203,144 @@ function shufflePlaylist(){
         [playlist[i],playlist[j]] = [playlist[j],playlist[i]];
     }
 
+}/* ================= ENHANCED FIREFLIES ================= */
+
+const fireCanvas = document.getElementById("fireflies");
+const fireCtx = fireCanvas.getContext("2d");
+
+fireCanvas.width = window.innerWidth;
+fireCanvas.height = window.innerHeight;
+
+let mouse = {
+    x: window.innerWidth / 2,
+    y: window.innerHeight / 2
+};
+
+window.addEventListener("mousemove", (e)=>{
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+});
+
+let fireflies = [];
+
+for(let i=0;i<70;i++){
+    fireflies.push({
+        x: Math.random()*fireCanvas.width,
+        y: Math.random()*fireCanvas.height,
+        radius: Math.random()*2+1.5,
+        speedX: (Math.random()-0.5)*0.4,
+        speedY: (Math.random()-0.5)*0.4,
+        opacity: Math.random(),
+        flickerSpeed: Math.random()*0.02+0.01
+    });
 }
+
+function animateFireflies(){
+
+    fireCtx.clearRect(0,0,fireCanvas.width,fireCanvas.height);
+
+    fireflies.forEach(f=>{
+
+        // --- Gentle attraction toward cursor ---
+        const dx = mouse.x - f.x;
+        const dy = mouse.y - f.y;
+        const distance = Math.sqrt(dx*dx + dy*dy);
+
+        if(distance < 200){
+            f.x += dx * 0.002;  // very soft pull
+            f.y += dy * 0.002;
+        }
+
+        // --- Flicker ---
+        f.opacity += f.flickerSpeed;
+        if(f.opacity > 1 || f.opacity < 0.2){
+            f.flickerSpeed *= -1;
+        }
+
+        // --- Glow ---
+        const gradient = fireCtx.createRadialGradient(
+            f.x, f.y, 0,
+            f.x, f.y, f.radius*10
+        );
+
+        gradient.addColorStop(0, `rgba(255,230,150,${f.opacity})`);
+        gradient.addColorStop(0.3, `rgba(255,200,100,${f.opacity*0.6})`);
+        gradient.addColorStop(1, "rgba(255,200,100,0)");
+
+        fireCtx.beginPath();
+        fireCtx.fillStyle = gradient;
+        fireCtx.arc(f.x,f.y,f.radius*10,0,Math.PI*2);
+        fireCtx.fill();
+
+        // --- Natural drifting ---
+        f.x += f.speedX;
+        f.y += f.speedY;
+
+        // Wrap around edges
+        if(f.x < 0) f.x = fireCanvas.width;
+        if(f.x > fireCanvas.width) f.x = 0;
+        if(f.y < 0) f.y = fireCanvas.height;
+        if(f.y > fireCanvas.height) f.y = 0;
+    });
+
+    requestAnimationFrame(animateFireflies);
+}
+
+animateFireflies();
+
+window.addEventListener("resize", ()=>{
+    fireCanvas.width = window.innerWidth;
+    fireCanvas.height = window.innerHeight;
+});
+/* ================= GOLDEN PARTICLES ================= */
+
+const goldCanvas = document.getElementById("goldenParticles");
+const goldCtx = goldCanvas.getContext("2d");
+
+goldCanvas.width = window.innerWidth;
+goldCanvas.height = window.innerHeight;
+
+let goldParticles = [];
+
+for(let i=0;i<80;i++){
+    goldParticles.push({
+        x: Math.random()*goldCanvas.width,
+        y: Math.random()*goldCanvas.height,
+        size: Math.random()*2+1,
+        speedY: Math.random()*0.5+0.2,
+        speedX: (Math.random()-0.5)*0.3,
+        opacity: Math.random()*0.5+0.2
+    });
+}
+
+function animateGoldParticles(){
+
+    goldCtx.clearRect(0,0,goldCanvas.width,goldCanvas.height);
+
+    goldParticles.forEach(p=>{
+        goldCtx.beginPath();
+        goldCtx.arc(p.x,p.y,p.size,0,Math.PI*2);
+        goldCtx.fillStyle = `rgba(212,175,55,${p.opacity})`;
+        goldCtx.fill();
+
+        p.y -= p.speedY;
+        p.x += p.speedX;
+
+        if(p.y < 0){
+            p.y = goldCanvas.height;
+            p.x = Math.random()*goldCanvas.width;
+        }
+    });
+
+    requestAnimationFrame(animateGoldParticles);
+}
+
+animateGoldParticles();
+
+window.addEventListener("resize", ()=>{
+    goldCanvas.width = window.innerWidth;
+    goldCanvas.height = window.innerHeight;
+});
 
 /* Confetti */
 const canvas = document.getElementById("confetti");
@@ -279,7 +415,7 @@ let volume = Math.sqrt(sum/dataArray.length);
 
 let bend = Math.min(volume/10,20);
 flame.style.transform = "scale("+(1-volume/250)+") rotateX("+bend+"deg)";
-    if(volume > 110 && !candleBlown){
+    if(volume > 98 && !candleBlown){
 
         candleBlown = true;
 
@@ -306,11 +442,12 @@ gift.addEventListener("click", () => {
 
 tapCount++;
 
-gift.style.transform = "scale(0.95) rotate("+(Math.random()*6-3)+"deg)";
-
-setTimeout(()=>{
-gift.style.transform="";
-},120);
+document.querySelectorAll(".controls button").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+        btn.style.transform = "scale(0.95) rotate(-2deg)";
+        setTimeout(()=>{ btn.style.transform = ""; },120);
+    });
+});
 
 if(tapCount >= tapsRequired){
 
@@ -351,10 +488,8 @@ function startMicBlowDetection(){
 
 const vinylPlayer = document.getElementById("vinyl");
 
-vinyl.addEventListener("click", () => {
-
+document.querySelector(".vinyl-wrapper").addEventListener("click", () => {
     player.classList.toggle("open");
-
 });
 
 function blowCandle(){
@@ -388,9 +523,10 @@ function animateConfetti(){
     requestAnimationFrame(animateConfetti);
 }
 function showPlayer(){
-
-   player.classList.add("show");
+ 
     player.classList.remove("collapsed");
+    player.classList.add("show");
+
 
     setTimeout(()=>{
         player.classList.add("collapsed");
