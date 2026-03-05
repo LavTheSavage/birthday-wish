@@ -5,6 +5,7 @@ const message = document.getElementById("message");
 const music = document.getElementById("bgMusic");
 const cake = document.querySelector(".cake");
 const player = document.querySelector(".vinyl-player");
+let candleBlown = false;
 
 
 /* ================= PLAYLIST SYSTEM ================= */
@@ -288,28 +289,67 @@ async function startMic(){
 
 function detectBlow(){
 
+    if(!analyser || candleBlown) return;
+
     analyser.getByteFrequencyData(dataArray);
+let sum = 0;
 
-    let volume = dataArray.reduce((a,b)=>a+b)/dataArray.length;
+for(let i=0;i<dataArray.length;i++){
+sum += dataArray[i] * dataArray[i];
+}
 
-    let percent = Math.min(volume * 3,100);
+let volume = Math.sqrt(sum/dataArray.length);
+
+    console.log("Mic volume:", volume);
+
+    let percent = Math.min(volume * 1,100);
 
     document.getElementById("blowMeter").style.width = percent + "%";
 
-    if(volume > 15){
+    flame.style.transform = "scale(" + (1 - volume/200) + ")";
+
+    if(volume > 100 && !candleBlown){
+
+        candleBlown = true;
 
         blowCandle();
 
+        setTimeout(()=>{
+            startSite();
+        },500);
+
+        return;
     }
 
     requestAnimationFrame(detectBlow);
 }
+
+
+const gift = document.getElementById("giftBox");
+const cakeArea = document.getElementById("cakeArea");
+
+gift.addEventListener("click", async ()=>{
+
+gift.classList.add("open");
+
+setTimeout(()=>{
+
+gift.style.display="none";
+cakeArea.style.display="block";
+
+startMicBlowDetection();
+
+},700);
+
+});
 
 function startMicBlowDetection(){
 
     if(!micAllowed || !micStream) return;
 
     const audioCtx = new AudioContext();
+
+    audioCtx.resume();
 
     const source = audioCtx.createMediaStreamSource(micStream);
 
@@ -323,7 +363,7 @@ function startMicBlowDetection(){
     detectBlow();
 }
 
-const vinylPlayer = document.querySelector(".vinyl-player");
+const vinylPlayer = document.getElementById("vinyl");
 
 vinyl.addEventListener("click", () => {
 
@@ -337,6 +377,7 @@ flame.style.transform="scale(0)";
 flame.style.opacity="0";
 flame.style.transition="0.5s";
 
+if(analyser) analyser.disconnect();
 }
 
 function animateConfetti(){

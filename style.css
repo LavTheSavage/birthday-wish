@@ -387,22 +387,32 @@ z-index:1000;
 100%{box-shadow:0 0 10px rgba(255,255,255,0.2);}
 
 }
-
 #blowMeterContainer{
-width:250px;
-height:14px;
-background:#222;
+width:260px;
+height:16px;
 border-radius:20px;
-margin:20px auto;
+background:rgba(0,0,0,0.35);
+margin:22px auto;
 overflow:hidden;
-box-shadow:0 0 10px rgba(255,255,255,0.2);
+box-shadow:
+inset 0 0 8px rgba(0,0,0,0.8),
+0 0 10px rgba(255,255,255,0.15);
 }
 
 #blowMeter{
 height:100%;
 width:0%;
-background:linear-gradient(90deg,#00ffcc,#00ff66,#aaff00);
-transition:width 0.1s;
+
+background:
+linear-gradient(90deg,
+#00d2ff,
+#3cff00,
+#ffee00,
+#ff8800,
+#ff0000);
+
+transition:width .08s;
+box-shadow:0 0 15px rgba(255,255,255,.5);
 }
 
 #blowText{
@@ -410,6 +420,42 @@ text-align:center;
 font-size:14px;
 opacity:0.8;
 margin-top:8px;
+}
+
+.gift-box{
+width:120px;
+height:120px;
+position:relative;
+cursor:pointer;
+animation:floatGift 2s ease-in-out infinite;
+}
+
+.box{
+width:120px;
+height:80px;
+background:#d4af37;
+border-radius:8px;
+position:absolute;
+bottom:0;
+}
+
+.lid{
+width:120px;
+height:40px;
+background:#c89b2c;
+position:absolute;
+top:0;
+border-radius:8px;
+transition:.5s;
+}
+
+.gift-box.open .lid{
+transform:translateY(-80px) rotate(-20deg);
+}
+
+@keyframes floatGift{
+0%,100%{transform:translateY(0)}
+50%{transform:translateY(-10px)}
 }
 
 .player-panel{
