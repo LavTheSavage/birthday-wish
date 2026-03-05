@@ -273,15 +273,13 @@ sum += dataArray[i] * dataArray[i];
 
 let volume = Math.sqrt(sum/dataArray.length);
 
-    console.log("Mic volume:", volume);
-
     let percent = Math.min(volume * 1,100);
 
     document.getElementById("blowMeter").style.width = percent + "%";
 
 let bend = Math.min(volume/10,20);
 flame.style.transform = "scale("+(1-volume/250)+") rotateX("+bend+"deg)";
-    if(volume > 140 && !candleBlown){
+    if(volume > 110 && !candleBlown){
 
         candleBlown = true;
 
