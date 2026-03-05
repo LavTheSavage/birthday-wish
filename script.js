@@ -48,8 +48,13 @@ function loadTrack(index) {
 }
 
 function playMusic() {
-    music.play();
-    record.style.animation="spin 4s linear infinite, vinylGlow 3s infinite";
+
+    music.currentTime = music.currentTime;
+
+    music.play().catch(()=>{});
+
+    record.style.animationPlayState = "running";
+
     playPauseBtn.textContent = "⏸";
 }
 
@@ -86,11 +91,6 @@ music.addEventListener("ended", () => {
     playMusic();
 });
 
-player.addEventListener("click", () => {
-
-    player.classList.toggle("open");
-
-});
 
 const micGate = document.getElementById("micGate");
 const allowMic = document.getElementById("allowMic");
@@ -119,7 +119,7 @@ skipMic.onclick = () => {
 };
 
 cake.addEventListener("click", async () => {
-    if (micGate.style.display !== "none") return;
+    if (!micAllowed && micGate.style.display !== "none") return;
 
     blowCandle();
 
@@ -144,6 +144,11 @@ cake.addEventListener("click", async () => {
 
     startConfetti();
     startMicBlowDetection();
+});
+
+window.addEventListener("resize", ()=>{
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 });
 
 function startSite(){
@@ -259,47 +264,78 @@ function startConfetti(){
     },8000);
 
 }
-async function startMicBlowDetection() {
-    if(!micStream) return; // stop if no mic
-    try {
-        const ctx = new AudioContext();
-        const mic = ctx.createMediaStreamSource(micStream);
-        const analyser = ctx.createAnalyser();
-        analyser.fftSize = 256;
-        mic.connect(analyser);
-        const data = new Uint8Array(analyser.frequencyBinCount);
 
-        function detect(){
-            analyser.getByteTimeDomainData(data);
-            let sum = 0;
-            for(let i=0;i<data.length;i++){
-                let val = (data[i]-128)/128;
-                sum += val*val;
-            }
-            let volume = Math.sqrt(sum/data.length);
-            if(volume > 0.05){ // slightly lower threshold
-                blowCandle();
-            }
-            requestAnimationFrame(detect);
-        }
+let analyser;
+let dataArray;
 
-        detect();
-    } catch(e){
-        console.log("mic blocked");
+async function startMic(){
+
+    const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+
+    const audioCtx = new AudioContext();
+
+    const source = audioCtx.createMediaStreamSource(stream);
+
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 512;
+
+    source.connect(analyser);
+
+    dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+    detectBlow();
+}
+
+function detectBlow(){
+
+    analyser.getByteFrequencyData(dataArray);
+
+    let volume = dataArray.reduce((a,b)=>a+b)/dataArray.length;
+
+    let percent = Math.min(volume * 3,100);
+
+    document.getElementById("blowMeter").style.width = percent + "%";
+
+    if(volume > 15){
+
+        blowCandle();
+
     }
+
+    requestAnimationFrame(detectBlow);
+}
+
+function startMicBlowDetection(){
+
+    if(!micAllowed || !micStream) return;
+
+    const audioCtx = new AudioContext();
+
+    const source = audioCtx.createMediaStreamSource(micStream);
+
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 512;
+
+    source.connect(analyser);
+
+    dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+    detectBlow();
 }
 
 const vinylPlayer = document.querySelector(".vinyl-player");
 
-vinylPlayer.addEventListener("click",()=>{
+vinyl.addEventListener("click", () => {
 
-    vinylPlayer.classList.toggle("open");
-record.style.animation="spin 4s linear infinite, vinylGlow 3s infinite";
+    player.classList.toggle("open");
+
 });
 
 function blowCandle(){
-    flame.style.animation="none";
-    flame.style.opacity="0";
+
+flame.style.transform="scale(0)";
+flame.style.opacity="0";
+flame.style.transition="0.5s";
 
 }
 

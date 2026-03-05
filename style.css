@@ -388,7 +388,29 @@ z-index:1000;
 
 }
 
+#blowMeterContainer{
+width:250px;
+height:14px;
+background:#222;
+border-radius:20px;
+margin:20px auto;
+overflow:hidden;
+box-shadow:0 0 10px rgba(255,255,255,0.2);
+}
 
+#blowMeter{
+height:100%;
+width:0%;
+background:linear-gradient(90deg,#00ffcc,#00ff66,#aaff00);
+transition:width 0.1s;
+}
+
+#blowText{
+text-align:center;
+font-size:14px;
+opacity:0.8;
+margin-top:8px;
+}
 
 .player-panel{
 
