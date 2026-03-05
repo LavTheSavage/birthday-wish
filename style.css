@@ -361,6 +361,8 @@ z-index:1000;
 
 .gallery video {
     width: 100%;
+    aspect-ratio: 16/9;
+    max-height: 200px;
     border-radius: 18px;
     object-fit: cover; /* ensures it fills the grid nicely */
     transition: transform 0.6s ease, box-shadow 0.6s ease;
