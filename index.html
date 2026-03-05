@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday ❤️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Dis
+play:wght@500;700&family=Poppins:wght@300;400&display=swap"
+ rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<audio id="bgMusic"></audio>
+
+<div id="micGate">
+    <div class="mic-box">
+        <h2>🎂 Blow the Candle</h2>
+        <p>Allow microphone access so you can blow the candle.</p>
+
+        <button id="allowMic">Allow Microphone</button>
+        <button id="skipMic">Skip</button>
+    </div>
+</div>
+
+<!-- LOADER -->
+<div id="loader">
+    <div class="cake">
+        <div class="plate"></div>
+        <div class="layer layer-bottom"></div>
+        <div class="layer layer-middle"></div>
+        <div class="layer layer-top"></div>
+        <div class="icing"></div>
+        <div class="drip drip1"></div>
+        <div class="drip drip2"></div>
+        <div class="candle">
+            <div class="flame" id="flame"></div>
+        </div>
+    </div>
+ <p class="loading-text">Make a Wish ✨</p>
+<p class="cake-hint">Click the cake to blow the candle</p>
+</div>
+
+<!-- MAIN CONTENT -->
+<section id="main">
+    <h1 class="title">Happy Birthday, My Beautiful Soul</h1>
+
+
+    <div class="message" id="message">
+        <p>
+        Today, the world became more beautiful because you were born.
+        May your life be filled with warmth, laughter, grace and endless love.
+        You deserve every happiness this universe can offer.
+        </p>
+    </div>
+
+    <!-- GALLERY -->
+    <div class="gallery">
+        <img src="img1.jpg">
+        <img src="img2.jpg">
+        <img src="img3.jpg">
+        <img src="img4.jpg">
+    </div>
+</section>
+
+<div class="vinyl-player" id="vinylPlayer">
+
+    <div class="vinyl" id="vinyl">
+        <div class="record"></div>
+    </div>
+
+    <div class="player-panel">
+
+        <p id="songTitle"></p>
+
+        <div class="controls">
+            <button id="prevBtn">⏮</button>
+            <button id="playPauseBtn">▶</button>
+            <button id="nextBtn">⏭</button>
+        </div>
+
+    </div>
+
+</div>
+
+<canvas id="confetti"></canvas>
+
+<script src="script.js"></script>
+</body>
+</html>

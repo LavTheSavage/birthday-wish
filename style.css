@@ -1,0 +1,499 @@
+:root {
+    --soft-orange: #f4a261;
+    --deep-crimson: #8b1e3f;
+    --ivory: #fffaf0;
+    --gold: #d4af37;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body::after{
+    content:"";
+    position:fixed;
+    inset:0;
+    background-image: radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px);
+    background-size:40px 40px;
+    pointer-events:none;
+    opacity:.2;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f9d5c0, #f4a261, #8b1e3f);
+    overflow-x: hidden;
+    color: var(--ivory);
+}
+
+/* ---------- LOADER ---------- */
+
+#loader {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(135deg, #f4a261, #8b1e3f);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    transition:opacity 1s ease;
+}
+
+.loading-text {
+    margin-top: 40px;
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+}
+
+/* CAKE */
+
+
+.cake {
+    position: relative;
+    width: 240px;
+    height: 220px;
+    cursor: pointer;
+    transform: scale(.95);
+    transition: transform 0.3s;
+}
+
+.cake:hover{
+    transform: scale(1.05);
+}
+
+.layer{
+    box-shadow:
+        inset 0 -6px 10px rgba(0,0,0,0.2),
+        inset 0 6px 10px rgba(255,255,255,0.2);
+}
+
+.icing{
+    box-shadow:
+        inset 0 -3px 8px rgba(0,0,0,0.2),
+        0 5px 10px rgba(0,0,0,0.25);
+}
+
+.plate{
+    background: radial-gradient(circle,#fff,#ddd);
+    box-shadow:0 8px 20px rgba(0,0,0,0.4);
+}
+
+.flame{
+    background: radial-gradient(circle, #ffd700, #ff8c00);
+    box-shadow:
+        0 0 10px #ffd700,
+        0 0 25px #ff8c00,
+        0 0 40px #ff4500;
+}
+
+@keyframes float{
+0%{transform:translateY(0);opacity:1;}
+100%{transform:translateY(-100vh);opacity:0;}
+}
+
+.vinyl:hover .record{
+box-shadow:
+0 0 20px rgba(212,175,55,.5),
+0 0 30px rgba(212,175,55,.3);
+}
+
+.record{
+
+width:80px;
+height:80px;
+border-radius:50%;
+
+background:
+repeating-radial-gradient(
+circle at center,
+#444 0px,
+#444 2px,
+#555 3px,
+#444 4px
+);
+
+border:4px solid #666;
+
+box-shadow:
+0 0 12px rgba(0,0,0,.8),
+inset 0 0 10px rgba(255,255,255,.05);
+
+animation:spin 4s linear infinite;
+animation-play-state:paused;
+
+position:relative;
+
+}
+
+.record::after{
+
+content:"";
+
+position:absolute;
+
+width:20px;
+height:20px;
+
+background:
+radial-gradient(circle,
+#d4af37 0%,
+#c59b2a 40%,
+#8a6b1d 100%);
+
+border-radius:50%;
+
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+
+}
+.plate {
+    width: 240px;
+    height: 20px;
+    background: #eee;
+    border-radius: 50%;
+    position: absolute;
+    bottom: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.cake-hint{
+    margin-top:10px;
+    font-size:14px;
+    opacity:0.8;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse{
+    0%{opacity:.4}
+    50%{opacity:1}
+    100%{opacity:.4}
+}
+
+.layer {
+    position: absolute;
+    width: 220px;
+    height: 50px;
+    border-radius: 10px;
+}
+
+.layer-bottom{
+    bottom:0;
+    background: linear-gradient(#8b1e3f,#6a132f);
+}
+
+.layer-middle{
+    bottom:50px;
+    background: linear-gradient(#f4a261,#e07a39);
+}
+
+.layer-top{
+    bottom:100px;
+    background: linear-gradient(#fffaf0,#f2e8dc);
+}
+
+.icing {
+    position: absolute;
+    bottom: 150px;
+    width: 220px;
+    height: 25px;
+    background: var(--ivory);
+    border-radius: 10px;
+}
+
+.drip {
+    position: absolute;
+    width: 20px;
+    height: 30px;
+    background: var(--ivory);
+    border-radius: 10px;
+    bottom: 125px;
+}
+
+.drip1 { left: 40px; }
+.drip2 { right: 40px; }
+
+.candle{
+    position:absolute;
+    width:12px;
+    height:48px;
+    background: repeating-linear-gradient(
+        45deg,
+        white,
+        white 6px,
+        #f4a261 6px,
+        #f4a261 12px
+    );
+    bottom:175px;
+    left:50%;
+    transform:translateX(-50%);
+    border-radius:4px;
+}
+
+.flame {
+    position: absolute;
+    width: 15px;
+    height: 20px;
+    background: gold;
+    border-radius: 50%;
+    top: -20px;
+    left: -2px;
+    animation: flicker 0.3s infinite alternate;
+}
+
+@keyframes flicker{
+    0%{ transform: scale(1) rotate(-2deg); }
+    50%{ transform: scale(1.1) rotate(2deg); }
+    100%{ transform: scale(1) rotate(-2deg); }
+}
+/* ---------- MAIN ---------- */
+
+#main {
+    display: none;
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.title {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    margin-bottom: 30px;
+    text-shadow:   
+        0 0 10px rgba(255,255,255,0.2),
+        0 0 25px rgba(212,175,55,0.3);
+}
+
+.elegant-btn {
+    padding: 12px 30px;
+    border: 1px solid var(--gold);
+    background: transparent;
+    color: var(--ivory);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+.elegant-btn:hover {
+    background: var(--gold);
+    color: black;
+}
+
+.message {
+    margin-top: 30px;
+    max-width: 600px;
+    margin-inline: auto;
+    opacity: 0;
+    transition: 1.5s;
+}
+
+.player-info{
+
+transform:scaleX(0);
+transform-origin:left;
+opacity:0;
+transition:.35s ease;
+
+}
+
+.music-player.open .player-info{
+
+transform:scaleX(1);
+opacity:1;
+
+}
+
+.music-player{
+position:fixed;
+top:25px;
+right:25px;
+display:flex;
+align-items:center;
+gap:15px;
+z-index:1000;
+}
+/* GALLERY */
+
+.gallery {
+    margin-top: 60px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.gallery img {
+    width: 100%;
+    border-radius: 15px;
+    transition: 0.5s;
+}
+
+.gallery img{
+    transition:.6s;
+    box-shadow:0 10px 25px rgba(0,0,0,0.3);
+}
+
+.gallery img:hover{
+    transform:scale(1.08);
+    box-shadow:0 20px 40px rgba(0,0,0,0.5);
+}
+
+/* CONFETTI CANVAS */
+
+#confetti {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    width: 100%;
+    height: 100%;
+}
+.vinyl-player{
+    position:fixed;
+    top:25px;
+    right:25px;
+
+    display:flex;
+    align-items:center;
+    gap:18px;
+
+    z-index:1000;
+
+    transform:translateX(120px) translateY(-40px);
+    opacity:0;
+
+    transition:.6s ease;
+}
+
+.vinyl-player.show{
+    transform:translateX(0) translateY(0);
+    opacity:1;
+}
+
+.vinyl{
+    width:70px;
+    height:70px;
+    cursor:pointer;
+}
+
+@keyframes vinylGlow{
+
+0%{box-shadow:0 0 10px rgba(255,255,255,0.2);}
+50%{box-shadow:0 0 20px rgba(255,255,255,0.6);}
+100%{box-shadow:0 0 10px rgba(255,255,255,0.2);}
+
+}
+
+
+
+.player-panel{
+
+    background:rgba(0,0,0,0.45);
+    backdrop-filter: blur(12px);
+
+    border-radius:18px;
+
+    padding:14px 18px;
+
+    transform:translateX(-20px) scaleX(0);
+    transform-origin:left;
+
+    opacity:0;
+
+    transition:.4s ease;
+
+}
+
+.vinyl-player.open .player-panel{
+    transform:translateX(0) scaleX(1);
+    opacity:1;
+ right: 25px;
+}
+.player-panel p{
+    font-family:'Playfair Display',serif;
+    margin-bottom:6px;
+}
+
+.controls button{
+
+    background:transparent;
+    border:1px solid var(--gold);
+
+    color:white;
+
+    padding:4px 10px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+}
+
+.vinyl {
+    width: 60px;
+    height: 60px;
+    position: relative;
+}
+
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.player-info {
+    color: var(--ivory);
+    font-size: 14px;
+}
+
+.player-info p {
+    font-family: 'Playfair Display', serif;
+    margin-bottom: 5px;
+}
+
+.controls button {
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--ivory);
+    padding: 5px 10px;
+    margin-right: 5px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.controls button:hover {
+    background: var(--gold);
+    color: black;
+}
+
+#micGate{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.85);
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:2000;
+}
+
+.mic-box{
+background:#111;
+padding:40px;
+border-radius:20px;
+text-align:center;
+color:white;
+max-width:350px;
+}
+
+.mic-box button{
+margin-top:15px;
+padding:10px 18px;
+border:none;
+border-radius:8px;
+background:#f4a261;
+cursor:pointer;
+}
