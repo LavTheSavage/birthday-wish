@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday 😛</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Dis
+play:wght@500;700&family=Poppins:wght@300;400&display=swap"
+ rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<audio id="bgMusic"></audio>
+
+<div id="micGate">
+    <div class="mic-box">
+        <h2>🎂 Blow the Candle</h2>
+        <p>Allow microphone access so you can blow the candle.</p>
+
+        <button id="allowMic">Allow Microphone</button>
+        <button id="skipMic">Skip</button>
+    </div>
+</div>
+
+<div id="loader">
+
+<div class="gift-box" id="giftBox">
+    <div class="lid"></div>
+    <div class="box"></div>
+</div>
+
+<p class="loading-text">Press to open.</p>
+
+<div id="cakeArea" style="display:none;">
+
+<div class="cake">
+    <div class="plate"></div>
+    <div class="layer layer-bottom"></div>
+    <div class="layer layer-middle"></div>
+    <div class="layer layer-top"></div>
+    <div class="icing"></div>
+    <div class="drip drip1"></div>
+    <div class="drip drip2"></div>
+    <div class="candle">
+        <div class="flame" id="flame"></div>
+    </div>
+</div>
+
+<p class="cake-hint">Blow the candle 🎂</p>
+
+<div id="blowMeterContainer">
+  <div id="blowMeter"></div>
+</div>
+
+<p id="blowText">Blow harder to make a wish ✨</p>
+
+</div>
+
+</div>
+
+
+
+<!-- MAIN CONTENT -->
+<section id="main">
+    <h1 class="title">Happy Birthday Maichyang</h1>
+
+
+    <div class="message" id="message">
+        <p>
+    Ever since we started talking, you've beeen a great friend for me. 
+    We met by coincidence, but I am really glad we did. You are a fun person to talk with.
+    <br>
+    We haven't met till now but I am sure you are even more amazing in person and I wish I can verify it myself someday.
+        </p>
+    </div>
+
+<div class="gallery">
+    <video src="Maichyang/vid1.mp4" loop muted autoplay playsinline></video>
+    <video src="Maichyang/vid2.mp4" loop muted autoplay playsinline></video>
+</div>
+</section>
+<div id="nowPlaying">Now Playing</div>
+<div class="vinyl-player" id="vinylPlayer">
+    <div class="vinyl-wrapper">
+<div class="tonearm"></div>
+    <div class="vinyl" id="vinyl">
+        <div class="record"></div>
+    </div>
+</div>
+    <div class="player-panel">
+<p class="now-playing">Now Playing</p>
+        <p id="songTitle"></p>
+
+        <div class="controls">
+            <button id="prevBtn">⏮</button>
+            <button id="playPauseBtn">▶</button>
+            <button id="nextBtn">⏭</button>
+        </div>
+
+    </div>
+
+</div>
+<canvas id="fireflies"></canvas>
+<canvas id="confetti"></canvas>
+<canvas id="goldenParticles"></canvas>
+<script src="script.js"></script>
+</body>
+</html>

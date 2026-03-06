@@ -3,149 +3,58 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Countdown</title>
+<title>Loading...</title>
 
 <style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
-
 body{
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-background:#050505;
-font-family:system-ui, Arial, sans-serif;
-color:white;
-overflow:hidden;
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#0f0f0f;
+    color:white;
+    font-family:Arial, sans-serif;
 }
 
-/* subtle animated background */
-body::before{
-content:"";
-position:fixed;
-inset:0;
-background:
-radial-gradient(circle at 30% 30%, rgba(255,255,255,0.05), transparent 40%),
-radial-gradient(circle at 70% 70%, rgba(255,255,255,0.04), transparent 40%);
-animation:moveBg 12s linear infinite alternate;
+#timer{
+    font-size:3rem;
+    letter-spacing:3px;
 }
-
-@keyframes moveBg{
-0%{transform:translateY(0)}
-100%{transform:translateY(-40px)}
-}
-
-#countdown{
-display:flex;
-gap:25px;
-font-size:3rem;
-letter-spacing:2px;
-z-index:2;
-}
-
-.time-block{
-display:flex;
-flex-direction:column;
-align-items:center;
-}
-
-.number{
-font-size:4rem;
-font-weight:600;
-text-shadow:
-0 0 10px rgba(255,255,255,0.6),
-0 0 30px rgba(255,255,255,0.3);
-transition:transform .3s ease;
-}
-
-.label{
-font-size:.7rem;
-opacity:.5;
-margin-top:5px;
-letter-spacing:2px;
-}
-
-.flip{
-transform:scale(1.15);
-}
-
 </style>
+
 </head>
 
 <body>
 
-<div id="countdown">
-
-<div class="time-block">
-<div id="days" class="number">00</div>
-<div class="label">DAYS</div>
-</div>
-
-<div class="time-block">
-<div id="hours" class="number">00</div>
-<div class="label">HOURS</div>
-</div>
-
-<div class="time-block">
-<div id="minutes" class="number">00</div>
-<div class="label">MIN</div>
-</div>
-
-<div class="time-block">
-<div id="seconds" class="number">00</div>
-<div class="label">SEC</div>
-</div>
-
-</div>
+<div id="timer">Loading...</div>
 
 <script>
 
-const target = new Date("2026-03-08T00:00:00+05:45").getTime();
+const targetDate = new Date("2026-03-08T00:00:00+05:45");
 
-const d = document.getElementById("days");
-const h = document.getElementById("hours");
-const m = document.getElementById("minutes");
-const s = document.getElementById("seconds");
+function updateTimer(){
 
-function animate(el){
-el.classList.add("flip");
-setTimeout(()=>el.classList.remove("flip"),200);
-}
+    const now = new Date();
+    const diff = targetDate - now;
 
-function update(){
+    if(diff <= 0){
+        window.location.href = "birthday.html";
+        return;
+    }
 
-const now = new Date().getTime();
-const diff = target - now;
+    const days = Math.floor(diff / (1000*60*60*24));
+    const hours = Math.floor((diff / (1000*60*60)) % 24);
+    const minutes = Math.floor((diff / (1000*60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
 
-if(diff <= 0){
-d.textContent="00";
-h.textContent="00";
-m.textContent="00";
-s.textContent="00";
-return;
-}
-
-const days = Math.floor(diff/(1000*60*60*24));
-const hours = Math.floor((diff%(1000*60*60*24))/(1000*60*60));
-const minutes = Math.floor((diff%(1000*60*60))/(1000*60));
-const seconds = Math.floor((diff%(1000*60))/1000);
-
-if(s.textContent != seconds) animate(s);
-
-d.textContent = String(days).padStart(2,"0");
-h.textContent = String(hours).padStart(2,"0");
-m.textContent = String(minutes).padStart(2,"0");
-s.textContent = String(seconds).padStart(2,"0");
+    document.getElementById("timer").innerText =
+        `${days}d ${hours}h ${minutes}m ${seconds}s`;
 
 }
 
-setInterval(update,1000);
-update();
+setInterval(updateTimer,1000);
+updateTimer();
 
 </script>
 
