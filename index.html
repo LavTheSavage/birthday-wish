@@ -3,109 +3,151 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Happy Birthday 😛</title>
+<title>Countdown</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Dis
-play:wght@500;700&family=Poppins:wght@300;400&display=swap"
- rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:#050505;
+font-family:system-ui, Arial, sans-serif;
+color:white;
+overflow:hidden;
+}
+
+/* subtle animated background */
+body::before{
+content:"";
+position:fixed;
+inset:0;
+background:
+radial-gradient(circle at 30% 30%, rgba(255,255,255,0.05), transparent 40%),
+radial-gradient(circle at 70% 70%, rgba(255,255,255,0.04), transparent 40%);
+animation:moveBg 12s linear infinite alternate;
+}
+
+@keyframes moveBg{
+0%{transform:translateY(0)}
+100%{transform:translateY(-40px)}
+}
+
+#countdown{
+display:flex;
+gap:25px;
+font-size:3rem;
+letter-spacing:2px;
+z-index:2;
+}
+
+.time-block{
+display:flex;
+flex-direction:column;
+align-items:center;
+}
+
+.number{
+font-size:4rem;
+font-weight:600;
+text-shadow:
+0 0 10px rgba(255,255,255,0.6),
+0 0 30px rgba(255,255,255,0.3);
+transition:transform .3s ease;
+}
+
+.label{
+font-size:.7rem;
+opacity:.5;
+margin-top:5px;
+letter-spacing:2px;
+}
+
+.flip{
+transform:scale(1.15);
+}
+
+</style>
 </head>
 
 <body>
 
-<audio id="bgMusic"></audio>
+<div id="countdown">
 
-<div id="micGate">
-    <div class="mic-box">
-        <h2>🎂 Blow the Candle</h2>
-        <p>Allow microphone access so you can blow the candle.</p>
-
-        <button id="allowMic">Allow Microphone</button>
-        <button id="skipMic">Skip</button>
-    </div>
+<div class="time-block">
+<div id="days" class="number">00</div>
+<div class="label">DAYS</div>
 </div>
 
-<div id="loader">
-
-<div class="gift-box" id="giftBox">
-    <div class="lid"></div>
-    <div class="box"></div>
+<div class="time-block">
+<div id="hours" class="number">00</div>
+<div class="label">HOURS</div>
 </div>
 
-<p class="loading-text">Press to open.</p>
-
-<div id="cakeArea" style="display:none;">
-
-<div class="cake">
-    <div class="plate"></div>
-    <div class="layer layer-bottom"></div>
-    <div class="layer layer-middle"></div>
-    <div class="layer layer-top"></div>
-    <div class="icing"></div>
-    <div class="drip drip1"></div>
-    <div class="drip drip2"></div>
-    <div class="candle">
-        <div class="flame" id="flame"></div>
-    </div>
+<div class="time-block">
+<div id="minutes" class="number">00</div>
+<div class="label">MIN</div>
 </div>
 
-<p class="cake-hint">Blow the candle 🎂</p>
-
-<div id="blowMeterContainer">
-  <div id="blowMeter"></div>
-</div>
-
-<p id="blowText">Blow harder to make a wish ✨</p>
-
+<div class="time-block">
+<div id="seconds" class="number">00</div>
+<div class="label">SEC</div>
 </div>
 
 </div>
 
+<script>
 
+const target = new Date("2026-03-08T00:00:00+05:45").getTime();
 
-<!-- MAIN CONTENT -->
-<section id="main">
-    <h1 class="title">Happy Birthday Maichyang</h1>
+const d = document.getElementById("days");
+const h = document.getElementById("hours");
+const m = document.getElementById("minutes");
+const s = document.getElementById("seconds");
 
+function animate(el){
+el.classList.add("flip");
+setTimeout(()=>el.classList.remove("flip"),200);
+}
 
-    <div class="message" id="message">
-        <p>
-    Ever since we started talking, you've beeen a great friend for me. 
-    We met by coincidence, but I am really glad we did. You are a fun person to talk with.
-    <br>
-    We haven't met till now but I am sure you are even more amazing in person and I wish I can verify it myself someday.
-        </p>
-    </div>
+function update(){
 
-<div class="gallery">
-    <video src="Maichyang/vid1.mp4" loop muted autoplay playsinline></video>
-    <video src="Maichyang/vid2.mp4" loop muted autoplay playsinline></video>
-</div>
-</section>
-<div id="nowPlaying">Now Playing</div>
-<div class="vinyl-player" id="vinylPlayer">
-    <div class="vinyl-wrapper">
-<div class="tonearm"></div>
-    <div class="vinyl" id="vinyl">
-        <div class="record"></div>
-    </div>
-</div>
-    <div class="player-panel">
-<p class="now-playing">Now Playing</p>
-        <p id="songTitle"></p>
+const now = new Date().getTime();
+const diff = target - now;
 
-        <div class="controls">
-            <button id="prevBtn">⏮</button>
-            <button id="playPauseBtn">▶</button>
-            <button id="nextBtn">⏭</button>
-        </div>
+if(diff <= 0){
+d.textContent="00";
+h.textContent="00";
+m.textContent="00";
+s.textContent="00";
+return;
+}
 
-    </div>
+const days = Math.floor(diff/(1000*60*60*24));
+const hours = Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+const minutes = Math.floor((diff%(1000*60*60))/(1000*60));
+const seconds = Math.floor((diff%(1000*60))/1000);
 
-</div>
-<canvas id="fireflies"></canvas>
-<canvas id="confetti"></canvas>
-<canvas id="goldenParticles"></canvas>
-<script src="script.js"></script>
+if(s.textContent != seconds) animate(s);
+
+d.textContent = String(days).padStart(2,"0");
+h.textContent = String(hours).padStart(2,"0");
+m.textContent = String(minutes).padStart(2,"0");
+s.textContent = String(seconds).padStart(2,"0");
+
+}
+
+setInterval(update,1000);
+update();
+
+</script>
+
 </body>
 </html>

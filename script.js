@@ -175,6 +175,11 @@ function startSite(){
 player.classList.add("show");
 }
 
+typeMessage(
+"Finally, I want to wish you a very happy birthday and thank you for being a great friend. ",
+message
+);
+
 function startMusic(){
 
     shufflePlaylist();
@@ -184,7 +189,7 @@ function startMusic(){
 
 }
 
-function typeMessage(text, element, speed=40){    
+function typeMessage(text, element, speed=20){    
     let i=0;
     function type(){
     if(i<text.length){
@@ -198,10 +203,7 @@ function typeMessage(text, element, speed=40){
 type();
 }
 
-typeMessage(
-"Finally, I want to wish you a very happy birthday and thank you for being a great friend. ",
-message
-);
+
 
 function shufflePlaylist(){
 
