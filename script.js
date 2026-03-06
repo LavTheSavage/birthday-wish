@@ -190,7 +190,7 @@ type();
 }
 
 typeMessage(
-"Today the world became more beautiful because you were born...",
+"Finally, I want to wish you a very happy birthday and thank you for being a great friend. ",
 message
 );
 
@@ -223,7 +223,7 @@ window.addEventListener("mousemove", (e)=>{
 
 let fireflies = [];
 
-for(let i=0;i<70;i++){
+for(let i=0;i<45;i++){
     fireflies.push({
         x: Math.random()*fireCanvas.width,
         y: Math.random()*fireCanvas.height,
@@ -415,7 +415,7 @@ let volume = Math.sqrt(sum/dataArray.length);
 
 let bend = Math.min(volume/10,20);
 flame.style.transform = "scale("+(1-volume/250)+") rotateX("+bend+"deg)";
-    if(volume > 98 && !candleBlown){
+    if(volume > 80 && !candleBlown){
 
         candleBlown = true;
 
@@ -431,6 +431,18 @@ flame.style.transform = "scale("+(1-volume/250)+") rotateX("+bend+"deg)";
     requestAnimationFrame(detectBlow);
 }
 
+function showNowPlaying(song){
+const el=document.getElementById("nowPlaying");
+el.textContent="🎵 Now Playing: "+song;
+
+el.style.opacity=1;
+el.style.transform="translateY(0)";
+
+setTimeout(()=>{
+el.style.opacity=0;
+el.style.transform="translateY(20px)";
+},3000);
+}
 
 const gift = document.getElementById("giftBox");
 const cakeArea = document.getElementById("cakeArea");
@@ -442,17 +454,14 @@ gift.addEventListener("click", () => {
 
 tapCount++;
 
-document.querySelectorAll(".controls button").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-        btn.style.transform = "scale(0.95) rotate(-2deg)";
-        setTimeout(()=>{ btn.style.transform = ""; },120);
-    });
-});
-
 if(tapCount >= tapsRequired){
 
 gift.classList.add("open");
+gift.classList.add("shake");
 
+setTimeout(()=>{
+gift.classList.remove("shake");
+},350);
 setTimeout(()=>{
 
 gift.style.display="none";
@@ -464,6 +473,13 @@ startMicBlowDetection();
 
 }
 
+});
+
+document.querySelectorAll(".controls button").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+        btn.style.transform = "scale(0.95) rotate(-2deg)";
+        setTimeout(()=>{ btn.style.transform = ""; },120);
+    });
 });
 
 function startMicBlowDetection(){
