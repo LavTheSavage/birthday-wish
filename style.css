@@ -133,7 +133,6 @@ box-shadow:
     animation-play-state: paused;
 }
 
-/* Real vinyl grooves */
 .record::before{
     content:"";
     position:absolute;
@@ -400,12 +399,12 @@ z-index:1000;
 
 /* CLOSED (default) */
 .vinyl-player:not(.open) .vinyl-wrapper{
-    transform: translateX(0);
+    transform: translateX(90px);
 }
 
 /* OPEN → slide left */
 .vinyl-player.open .vinyl-wrapper{
-    transform: translateX(-160px);
+    transform: translateX(-30px);
 }
 
 .vinyl-player{
@@ -413,7 +412,7 @@ z-index:1000;
 position:fixed;
 
 top:30px;
-right:40px;
+right:-30px;
 
 display:flex;
 align-items:center;
@@ -422,7 +421,7 @@ gap:5px;
 
 z-index:1000;
 
-transform:translateY(-40px) scale(.9);
+transform:translateY(-0px) scale(.9);
 opacity:0;
 animation: floatPlayer 4s ease-in-out infinite;
 transition:.6s cubic-bezier(.2,.8,.2,1);
@@ -494,18 +493,11 @@ height:140px;
 position:relative;
 cursor:pointer;
 
-animation:floatGift 3s ease-in-out infinite,shakeGift 1.5s infinite;
+animation:floatGift 3s ease-in-out infinite;
 }
 
 button:active {
     transform: scale(0.95) rotate(-2deg); /* quick visual feedback */
-}
-
-@keyframes shakeGift {
-    0%,100% { transform: translateY(0) }
-    25% { transform: translateX(-8px) rotate(-2deg) }
-    50% { transform: translateX(8px) rotate(2deg) }
-    75% { transform: translateX(-6px) rotate(-1deg) }
 }
 
 @keyframes giftShake{
@@ -612,7 +604,7 @@ rotate(-20deg);
 
     width:180px;
 
-    transform: translateX(40px);
+    transform: translateX(-30px);
     opacity:0;
 
     transition:.5s ease;
@@ -627,7 +619,7 @@ rotate(-20deg);
 }
 
 .vinyl-player.open .player-panel{
-    transform: translateX(0);
+    transform: translateX(10);
     opacity:1;
 }
 

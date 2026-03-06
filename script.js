@@ -39,7 +39,7 @@ const songTitle = document.getElementById("songTitle");
 const playPauseBtn = document.getElementById("playPauseBtn");
 const nextBtn = document.getElementById("nextBtn");
 const prevBtn = document.getElementById("prevBtn");
-const record = document.querySelector(".record");
+const record = document.querySelector(".record") || {};
 
 function loadTrack(index) {
     music.src = playlist[index].file;
@@ -85,7 +85,7 @@ nextBtn.addEventListener("click", () => {
     currentTrack = (currentTrack + 1) % playlist.length;
     loadTrack(currentTrack);
     playMusic();
-    showNowPlaying();
+showNowPlaying(playlist[currentTrack].name);
     startMicBlowDetection();
 });
 
@@ -93,22 +93,30 @@ prevBtn.addEventListener("click", () => {
     currentTrack = (currentTrack - 1 + playlist.length) % playlist.length;
     loadTrack(currentTrack);
     playMusic();
-    showNowPlaying();
+showNowPlaying(playlist[currentTrack].name);
 });
 
 music.addEventListener("ended", () => {
     currentTrack = (currentTrack + 1) % playlist.length;
     loadTrack(currentTrack);
     playMusic();
-    showNowPlaying();
+showNowPlaying(playlist[currentTrack].name);
 });
 
-function showNowPlaying(){
-    songTitle.style.opacity = 0;
-    setTimeout(()=>{
-        songTitle.textContent = playlist[currentTrack].name;
-        songTitle.style.opacity = 1;
-    },100);
+function showNowPlaying(song){
+
+const el = document.getElementById("nowPlaying");
+
+el.textContent = "🎵 Now Playing: " + song;
+
+el.style.opacity = 1;
+el.style.transform = "translateY(0)";
+
+setTimeout(()=>{
+    el.style.opacity = 0;
+    el.style.transform = "translateY(20px)";
+},3000);
+
 }
 
 const micGate = document.getElementById("micGate");
@@ -162,6 +170,7 @@ function startSite(){
     shufflePlaylist();
     loadTrack(currentTrack);
     playMusic();
+    showNowPlaying(playlist[currentTrack].name);
     startConfetti();
 player.classList.add("show");
 }
@@ -223,7 +232,7 @@ window.addEventListener("mousemove", (e)=>{
 
 let fireflies = [];
 
-for(let i=0;i<45;i++){
+for(let i=0;i<55;i++){
     fireflies.push({
         x: Math.random()*fireCanvas.width,
         y: Math.random()*fireCanvas.height,
@@ -246,9 +255,9 @@ function animateFireflies(){
         const dy = mouse.y - f.y;
         const distance = Math.sqrt(dx*dx + dy*dy);
 
-        if(distance < 200){
-            f.x += dx * 0.002;  // very soft pull
-            f.y += dy * 0.002;
+        if(distance < 250){
+            f.x += dx * 0.003;  // very soft pull
+            f.y += dy * 0.003;
         }
 
         // --- Flicker ---
@@ -269,7 +278,7 @@ function animateFireflies(){
 
         fireCtx.beginPath();
         fireCtx.fillStyle = gradient;
-        fireCtx.arc(f.x,f.y,f.radius*10,0,Math.PI*2);
+        fireCtx.arc(f.x,f.y,f.radius*14,0,Math.PI*2);
         fireCtx.fill();
 
         // --- Natural drifting ---
@@ -353,7 +362,7 @@ let pieces = [];
 let confettiRunning=false;
 
 function startConfetti(){
-
+    pieces = [];
     confettiRunning=true;
 
     for (let i = 0; i < 150; i++) {
@@ -421,55 +430,60 @@ flame.style.transform = "scale("+(1-volume/250)+") rotateX("+bend+"deg)";
 
         blowCandle();
 
-        setTimeout(()=>{
-            startSite();
-        },500);
+setTimeout(()=>{
 
+    cakeArea.style.display = "none";
+
+    startSite();
+
+},600);
         return;
     }
 
     requestAnimationFrame(detectBlow);
 }
 
-function showNowPlaying(song){
-const el=document.getElementById("nowPlaying");
-el.textContent="🎵 Now Playing: "+song;
 
-el.style.opacity=1;
-el.style.transform="translateY(0)";
-
-setTimeout(()=>{
-el.style.opacity=0;
-el.style.transform="translateY(20px)";
-},3000);
-}
 
 const gift = document.getElementById("giftBox");
 const cakeArea = document.getElementById("cakeArea");
 
 let tapsRequired = Math.floor(Math.random()*5)+3; // 3-7 taps
 let tapCount = 0;
-
 gift.addEventListener("click", () => {
 
-tapCount++;
+    // stop if gift already opened
+    if(gift.classList.contains("open")) return;
 
-if(tapCount >= tapsRequired){
+    gift.classList.add("shake");
 
-gift.classList.add("open");
-gift.classList.add("shake");
+    setTimeout(()=>{
+        gift.classList.remove("shake");
+    },250);
 
-setTimeout(()=>{
-gift.classList.remove("shake");
-},350);
-setTimeout(()=>{
+    tapCount++;
 
-gift.style.display="none";
-cakeArea.style.display="block";
+  if(tapCount >= tapsRequired){
 
-startMicBlowDetection();
+    setTimeout(()=>{
 
-},700);
+        gift.classList.add("open");
+        burstFireflies();
+
+        gift.style.pointerEvents = "none";
+
+        // Hide gift
+        setTimeout(()=>{
+            gift.style.display = "none";
+
+            // Show candle area
+            cakeArea.style.display = "block";
+
+            startMicBlowDetection();
+
+        },700);
+
+    },200);
 
 }
 
@@ -481,6 +495,24 @@ document.querySelectorAll(".controls button").forEach(btn=>{
         setTimeout(()=>{ btn.style.transform = ""; },120);
     });
 });
+
+function burstFireflies(){
+
+fireflies.forEach(f=>{
+    f.speedX = (Math.random()-0.5)*6;
+    f.speedY = (Math.random()-0.5)*6;
+});
+
+setTimeout(()=>{
+
+fireflies.forEach(f=>{
+    f.speedX = (Math.random()-0.5)*0.4;
+    f.speedY = (Math.random()-0.5)*0.4;
+});
+
+},1200);
+
+}
 
 function startMicBlowDetection(){
 
@@ -556,4 +588,12 @@ player.addEventListener("mouseenter",()=>{
 
 player.addEventListener("mouseleave",()=>{
     player.classList.add("collapsed");
+});
+
+window.addEventListener("load", () => {
+
+    main.style.display = "none";
+    cakeArea.style.display = "none";
+
+    gift.style.display = "block";
 });
