@@ -121,7 +121,6 @@ setTimeout(()=>{
 
 const micGate = document.getElementById("micGate");
 const allowMic = document.getElementById("allowMic");
-const skipMic = document.getElementById("skipMic");
 
 let micAllowed = false;
 let micStream = null;
