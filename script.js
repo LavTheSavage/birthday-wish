@@ -128,21 +128,19 @@ let micStream = null;
 allowMic.onclick = async () => {
 
     try{
+
         micStream = await navigator.mediaDevices.getUserMedia({audio:true});
         micAllowed = true;
+        micGate.style.display="none";
+
     }catch(e){
-        micAllowed = false;
+
+        alert("Microphone access is required to blow the candle 🎂");
+
     }
 
-    micGate.style.display="none";
 };
 
-skipMic.onclick = () => {
-
-    micAllowed = false;
-    micGate.style.display="none";
-
-};
 
 
 window.addEventListener("resize", ()=>{
@@ -535,7 +533,7 @@ function startMicBlowDetection(){
     detectBlow();
 }
 
-const vinylPlayer = document.getElementById("vinyl");
+const vinylPlayer = document.getElementById("vinylPlayer");
 
 document.querySelector(".vinyl-wrapper").addEventListener("click", () => {
     player.classList.toggle("open");
