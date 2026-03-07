@@ -35,8 +35,7 @@ body{
 
 <script>
 
-const targetDate = new Date("2026-03-08T00:00:00+05:45");
-function updateTimer(){
+const targetDate = new Date(Date.now() + 10000);function updateTimer(){
 
     const now = new Date();
     const diff = targetDate - now;
